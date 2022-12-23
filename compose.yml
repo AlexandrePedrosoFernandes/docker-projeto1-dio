@@ -1,0 +1,35 @@
+version: '3.7'
+service:
+  apache:
+    image: http:latest
+    container_name: apache-seatsons
+    ports:
+    - '80:80'
+    volumes:
+    - ./seatsons:/usr/local/apache2/htdocs
+    networks:
+    - rede-seatsons    
+
+services:
+  mysqlsrv:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: "seatsons"
+      MYSQL_DATABASE: "seatsonsdb"
+    ports:
+      - "3306:3306"
+    volumes:
+      - /data/seatsons:/var/lib/mysql
+    networks:
+      - rede-seatsons
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    networks:
+      - rede-seatsons
+
+networks: 
+  rede-seatsons:
+    driver: bridge
